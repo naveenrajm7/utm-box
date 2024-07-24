@@ -71,6 +71,13 @@ https://wiki.debian.org/QEMU
 dd if=/dev/zero of=/tmp/junk ; sync ; rm /tmp/junk
 ```
 
+* Reduce GRUB timeout
+```bash
+sudo vi /etc/default/grub
+GRUB_TIMEOUT=1
+sudo update-grub
+```
+
 * Remove Devices  
   * Sound  
   * Display   (Use Serial if you need)
