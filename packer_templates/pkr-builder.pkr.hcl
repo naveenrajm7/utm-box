@@ -15,6 +15,7 @@ locals {
       "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
       "${path.root}/scripts/_common/vagrant.sh",
       "${path.root}/scripts/_common/utm.sh",
+      "${path.root}/scripts/${var.os_name}/cleanup_${var.os_name}.sh",
     ] : (
       var.os_name == "arch" ? [
         "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",

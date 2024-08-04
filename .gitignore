@@ -2,6 +2,7 @@
 output-prepare/*
 output-vm/*
 
+*.zip
 
 # MacOS
 .DS_Store

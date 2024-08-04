@@ -15,7 +15,7 @@ Building Vagrant compatible UTM box using Debian UTM file (from Gallery) with pa
 * Change the UTM file name to the VM name
 
 >Need to make sure the VM name and file name are same, 
-> Because our packer plugin does not know the VM name once its loads
+> Because our packer plugin does not know the VM name once it loads
 
 ## Packer Prepare
 
