@@ -1,7 +1,7 @@
 # How to build UTM Box
 
 
-This method was used to produce the debian UTM package.
+This method was used to produce the debian UTM package from ISO.
 ## Debian 
 
 0. Download ISO : https://www.debian.org/download
@@ -74,13 +74,17 @@ dd if=/dev/zero of=/tmp/junk ; sync ; rm /tmp/junk
 * Reduce GRUB timeout
 ```bash
 sudo vi /etc/default/grub
-GRUB_TIMEOUT=1
+GRUB_TIMEOUT=0
 sudo update-grub
 ```
 
-* Remove Devices  
-  * Sound  
-  * Display   (Use Serial if you need)
+* Network Devices
+  * The first network interface should be shared network (To access VM)
+  * The second network interface should be Emulated VLAN (For port forwarding)  
+* Display Devices
+  * Keep one Serial port with mode 'Pseudo-TTY Device'
+  * Remove all other display (To make VM headless)
+* Remove all Sound devices
 
 6. Export VM (UTM 'Share')
 

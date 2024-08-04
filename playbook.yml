@@ -1,0 +1,13 @@
+---
+# playbook.yml
+- name: 'Add vagrant user'
+  hosts: default
+  become: yes
+
+  tasks:
+    - name: Create a user 'vagrant' with a home directory
+      ansible.builtin.user:
+        name: vagrant
+        shell: /bin/bash
+        create_home: yes
+        password: '$6$rounds=4096$5CU3LEj/MQvbkfPb$LmKEF9pCfU8R.dA.GemgE/8GT6r9blge3grJvdsVTMFKyLEQwzEF3SGWqAzjawY/XHRpWj4fOiLBrRyxJhIRJ1'

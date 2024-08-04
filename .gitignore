@@ -1,0 +1,7 @@
+# Builds
+output-prepare/*
+output-vm/*
+
+
+# MacOS
+.DS_Store
