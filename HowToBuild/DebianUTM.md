@@ -1,73 +1,93 @@
-# Debian 11
+# Debian
 
-Building Vagrant compatible UTM box using Debian UTM file (from Gallery) with packer.
+Building Vagrant compatible UTM box using UTM file (from UTM Gallery) with packer.
+
+The process is semi-automated.
+1. We should manually create a vagrant ssh user in the VM.
+2. Run Packer template using the vagrant user
 
 
-## Manual prepare
+## 1. Manual Preparation
 
-* Download Debian UTM from gallery , unzip to get UTM file
-* Open the file in UTM
-* Change the VM name
-* Add Emulated VLAN as second network interface (TODO: Automate this in packer)
-* Save
-* Remove from UTM
-* Change the UTM file name to the VM name
+1. Download Debian UTM file from [UTM gallery](https://mac.getutm.app/gallery/) , unzip to get UTM file
 
->Need to make sure the VM name and file name are same, 
-> Because our packer plugin does not know the VM name once it loads
+2. Open the file in UTM (you can also drag and drop)
 
-## Packer Prepare
+3. Change the Name of VM to remove any space ( required for packer to indentify VM)
 
-This step adds vagrant user
+4. Add a second network interface and set the mode to 'Emulated VLAN'  ( we need this for packer and vagrant to connect)
 
-* Update variables prepare-debian.pkr.hcl
 
-```bash
-# path to the UTM file
-source_path = "../utm_gallery/Debian11G.utm"
-vm_name = "Debian11G"
-```
+5. After Saving , Start the VM and login using credentials given in Gallery 
+
+
+6. Add vagrant user by executing below commands (as sudo)
 
 ```bash
-PACKER_LOG=1 packer build  -var-file=os_pkrvars/debian/debian-11-aarch64.pkrvars.hcl prepare-debian.pkr.hcl
+# Add the user vagrant and set the password
+sudo useradd -m -s /bin/bash -c "vagrant" -p $(echo vagrant | openssl passwd -1 -stdin) vagrant
+
+# Add vagrant user to sudo group (allow ssh using password)
+sudo usermod -aG sudo vagrant
+
+# Let the vagrant user sudo without a password
+sudo mkdir -p /etc/sudoers.d
+echo "vagrant ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/vagrant
+
+# install wget
+sudo apt-get install -y wget
 ```
 
-* Export to the said folder
+7. Shut down
 
-* Remove VM from UTM
+```bash
+echo 'debian' | sudo -S /sbin/halt -h -p
+```
+
+8. Remove the VM from UTM
+
+9. Change the UTM file name to be same as VM name (required for packer to indentify VM)
 
 
-## Packer build
+## 2. Packer 
 
 This step runs the vagrant specific tasks (taken from chef/bento templates)
 
-* Update variables in pkr-sources.pkr.hcl
+1. Update variables in pkr-sources.pkr.hcl
+  Source should point to your UTM file
+  VM name shoudl point to your VM name
 
 ```json
-// Path to output from previous step
-utm_source_path = "./output-prepare/Debian11G.utm"
-utm_vm_name = "Debian11G"
+// Path to UTM file
+utm_source_path = "Debian11.utm"
+utm_vm_name = "Debian11"
 shutdown_command = "echo 'vagrant' | sudo -S /sbin/halt -h -p"
 ```
 
-Start build
+2. Start packer build
+
 ```bash
 PACKER_LOG=1 packer build  -var-file=os_pkrvars/debian/debian-11-aarch64.pkrvars.hcl packer_templates/
 ```
 
-* Remove Devices from VM Manually (No UTM API available to remove device)
-  * Remove any Display Device
+3. When promted for exporting VM, remove Devices from VM manually (No UTM API available to remove device)
+  * Remove any Display Device (for Headless)
   * Remove any Sound Device
-  * Add Serial Device and set it to Pseudo-TTY (for Headless VM)
+  * Add Serial Device and set it to Pseudo-TTY (for debugging)
 
-* Export 
+4. After removing devices, export ('Share') VM to the said path (So post-processor can zip it)
 
-* Wait for UTM preprocessor to package UTM into zip
+5. Confirm export in command line by pressing 'y'
 
-* Remove VM from UTM
+6. After build is successful, remove VM from UTM.
+
+Your vagrant compatible VM is ready to use!
 
 
-You can now use the produced zip file with vagrant or directly with UTM after unzipping.
+## Use with vagrant
+
+
+You can now use the produced zip file with vagrant
 
 ```bash
 python3 -m http.server                                                                            
@@ -80,7 +100,7 @@ Use in Vagrantfile
 ```ruby
 Vagrant.configure("2") do |config|
   config.vm.provider :utm do |utm|
-    utm.utm_file_url = "http://localhost:8000/debian_vagrant_utm.zip"
+    utm.utm_file_url = "http://localhost:8000/vm_vagrant_utm.zip"
   end
 end
 ```
