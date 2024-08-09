@@ -1,7 +1,9 @@
 # UTM box
 
+Packer templates to build Vagrant compatible UTM boxes,
+which can be used with Vagrant using [Vagrant UTM plugin](https://naveenrajm7.github.io/vagrant_utm)
 
-
+Check [HowToBuild](./HowToBuild/DebianUTM.md) to get started.
 
 ## Differences from Bento
 
