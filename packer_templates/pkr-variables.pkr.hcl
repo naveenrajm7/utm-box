@@ -4,6 +4,20 @@ variable "os_name" {
   description = "OS Brand Name"
 }
 
+variable "os_version" {
+  type        = string
+  description = "OS version number"
+}
+
+variable "os_arch" {
+  type = string
+  validation {
+    condition     = var.os_arch == "x86_64" || var.os_arch == "aarch64"
+    error_message = "The OS architecture type should be either x86_64 or aarch64."
+  }
+  description = "OS architecture type, x86_64 or aarch64"
+}
+
 variable "keep_registered" {
   type    = bool
   default = true
@@ -33,12 +47,40 @@ variable "no_proxy" {
 variable "sources_enabled" {
   type = list(string)
   default = [
-    "source.utm-utm.vm",
+    "source.utm-iso.vm",
   ]
   description = "Build Sources to use for building vagrant boxes"
 }
 
 # Source block common variables
+variable "boot_command" {
+  type        = list(string)
+  default     = null
+  description = "Commands to pass to gui session to initiate automated install"
+}
+
+variable "default_boot_wait" {
+  type    = string
+  default = null
+}
+
+variable "http_directory" {
+  type    = string
+  default = null
+}
+
+variable "iso_checksum" {
+  type        = string
+  default     = null
+  description = "ISO download checksum"
+}
+
+variable "iso_url" {
+  type        = string
+  default     = null
+  description = "ISO download url"
+}
+
 variable "ssh_username" {
   type    = string
   default = "vagrant"
