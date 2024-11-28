@@ -64,6 +64,31 @@ variable "default_boot_wait" {
   default = null
 }
 
+variable "cd_files" {
+  type    = list(string)
+  default = null
+}
+
+variable "cpus" {
+  type    = number
+  default = 2
+}
+
+variable "communicator" {
+  type    = string
+  default = null
+}
+
+variable "disk_size" {
+  type    = number
+  default = 65536
+}
+
+variable "floppy_files" {
+  type    = list(string)
+  default = null
+}
+
 variable "http_directory" {
   type    = string
   default = null
@@ -79,6 +104,11 @@ variable "iso_url" {
   type        = string
   default     = null
   description = "ISO download url"
+}
+
+variable "memory" {
+  type    = number
+  default = null
 }
 
 variable "ssh_username" {

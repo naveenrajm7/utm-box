@@ -24,6 +24,8 @@ source "utm-iso" "vm" {
   vm_arch = "${var.os_arch}"
   vm_backend = "qemu"
 
+  memory = var.memory
+  
   boot_command = var.boot_command
 
   http_directory = var.http_directory == null ? "${path.root}/http" : var.http_directory
