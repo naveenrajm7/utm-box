@@ -1,6 +1,20 @@
 #cloud-config
 autoinstall:
   version: 1
+  apt:
+    preserve_sources_list: false
+    mirror-selection:
+      primary:
+        - country-mirror
+        - uri: "http://archive.ubuntu.com/ubuntu"
+          arches: [i386, amd64]
+        - uri: "http://us.archive.ubuntu.com/ubuntu"
+          arches: [s390x, arm64, armhf, powerpc, ppc64el, riscv64]
+    # continue with an offline install if mirror validation fails.
+    fallback: offline-install
+    # perform IP-based geolocation to determine the correct country mirror
+    geoip: true
+    
   identity:
     hostname: vagrant
     username: vagrant
