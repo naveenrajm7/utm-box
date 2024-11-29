@@ -48,6 +48,7 @@ variable "sources_enabled" {
   type = list(string)
   default = [
     "source.utm-iso.vm",
+    "source.utm-utm.vm"
   ]
   description = "Build Sources to use for building vagrant boxes"
 }
@@ -121,8 +122,25 @@ variable "ssh_password" {
   default = "vagrant"
 }
 
+# utm-utm 
+variable "utm_source_path" {
+  type        = string
+  description = "Path to the UTM VM file"
+}
+
+variable "utm_vm_name" {
+  type        = string
+  description = "Name of the UTM VM"
+}
+
+variable "shutdown_command" {
+  type        = string
+  description = "Command to shutdown the VM"
+}
+
 # builder common block
 variable "scripts" {
   type    = list(string)
   default = null
 }
+

@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     utm = {
-      version = ">=v0.0.1"
+      version = ">=v0.0.2"
       source  = "github.com/naveenrajm7/utm"
     }
   }
@@ -23,7 +23,7 @@ locals {
         "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
         "${path.root}/scripts/_common/vagrant.sh",
         "${path.root}/scripts/_common/utm.sh",
-      ] : []
+      ] : [] // add more os here
     )
   ) : var.scripts
 
@@ -35,13 +35,13 @@ build {
 
   provisioner "shell" {
     environment_vars = [
-        "HOME_DIR=/home/vagrant",
+      "HOME_DIR=/home/vagrant",
         "http_proxy=${var.http_proxy}",
         "https_proxy=${var.https_proxy}",
         "no_proxy=${var.no_proxy}"
       ]
-    
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
+  
+    execute_command   = "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
     expect_disconnect = true
     scripts           = local.scripts
     except            = var.is_windows ? local.source_names : null
@@ -54,4 +54,13 @@ build {
     output = "{{.BuildName}}_vagrant_utm.zip"
     keep_input_artifact = true
   }
+
+  # Convert machines to vagrant boxes
+  # post-processor "vagrant" {
+  #   compression_level = 9
+  #   output            = "${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.{{ .Provider }}.box"
+  #   vagrantfile_template = var.is_windows ? "${path.root}/vagrantfile-windows.template" : (
+  #     var.os_name == "freebsd" ? "${path.root}/vagrantfile-freebsd.template" : null
+  #   )
+  # }
 }
