@@ -15,6 +15,9 @@ source "utm-utm" "vm" {
   ssh_password = var.ssh_password
   shutdown_command = var.shutdown_command
   keep_registered = var.keep_registered
+
+  output_directory = var.output_directory
+
 }
 
 source "utm-iso" "vm" {
@@ -32,6 +35,8 @@ source "utm-iso" "vm" {
 
   ssh_username = var.ssh_username
   ssh_password = var.ssh_password
-  shutdown_command = local.shutdown_command
+  shutdown_command = var.shutdown_command
   keep_registered = var.keep_registered
+
+  output_directory = var.output_directory
 }

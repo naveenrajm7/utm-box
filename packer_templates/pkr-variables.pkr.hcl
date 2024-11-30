@@ -112,6 +112,21 @@ variable "memory" {
   default = null
 }
 
+variable "output_directory" {
+  type    = string
+  default = null
+}
+
+variable "shutdown_command" {
+  type        = string
+  description = "Command to shutdown the VM"
+}
+
+variable "shutdown_timeout" {
+  type    = string
+  default = "15m"
+}
+
 variable "ssh_username" {
   type    = string
   default = "vagrant"
@@ -133,10 +148,7 @@ variable "utm_vm_name" {
   description = "Name of the UTM VM"
 }
 
-variable "shutdown_command" {
-  type        = string
-  description = "Command to shutdown the VM"
-}
+
 
 # builder common block
 variable "scripts" {
@@ -144,3 +156,9 @@ variable "scripts" {
   default = null
 }
 
+
+# post-processor common block
+variable "version" {
+  type        = string
+  description = "Version of the vagrant box"
+}
