@@ -60,6 +60,11 @@ variable "boot_command" {
   description = "Commands to pass to gui session to initiate automated install"
 }
 
+variable "boot_wait" {
+  type    = string
+  default = null
+}
+
 variable "default_boot_wait" {
   type    = string
   default = null
@@ -109,7 +114,7 @@ variable "iso_url" {
 
 variable "memory" {
   type    = number
-  default = null
+  default = 4096
 }
 
 variable "output_directory" {
@@ -119,7 +124,6 @@ variable "output_directory" {
 
 variable "shutdown_command" {
   type        = string
-  description = "Command to shutdown the VM"
 }
 
 variable "shutdown_timeout" {
@@ -137,14 +141,21 @@ variable "ssh_password" {
   default = "vagrant"
 }
 
+variable "ssh_timeout" {
+  type    = string
+  default = "5m"
+}
+
 # utm-utm 
 variable "utm_source_path" {
   type        = string
+  default     = null
   description = "Path to the UTM VM file"
 }
 
 variable "utm_vm_name" {
   type        = string
+  default     = null
   description = "Name of the UTM VM"
 }
 
@@ -160,5 +171,6 @@ variable "scripts" {
 # post-processor common block
 variable "version" {
   type        = string
+  default = null
   description = "Version of the vagrant box"
 }
