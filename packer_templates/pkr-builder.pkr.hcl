@@ -27,13 +27,17 @@ locals {
       "${path.root}/scripts/_common/utm.sh",
       "${path.root}/scripts/${var.os_name}/cleanup_${var.os_name}.sh",
     ] : (
-      var.os_name == "arch" ? [
+    var.os_name == "arch" ? [
         "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",
         "${path.root}/scripts/_common/sshd.sh",
         "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
         "${path.root}/scripts/_common/vagrant.sh",
         "${path.root}/scripts/_common/utm.sh",
-      ] : [] // add more os here
+      ] : (
+      var.os_name == "openbsd" ? [
+          "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
+        ] : []
+      )
     )
   ) : var.scripts
 
@@ -51,7 +55,10 @@ build {
         "no_proxy=${var.no_proxy}"
       ]
   
-    execute_command   = "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
+    execute_command   = ( 
+      var.os_name == "openbsd" ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" : 
+      "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
+    )
     expect_disconnect = true
     scripts           = local.scripts
     except            = var.is_windows ? local.source_names : null

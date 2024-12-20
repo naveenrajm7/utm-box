@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "utm/openbsd-7.6"
+  # Synced folder only works with rsync
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  # Default shell in OpenBSD
+  config.ssh.shell = "ksh"
+  # Default privilege escalation method 'doas'
+  config.ssh.sudo_command = "doas -u root %c"
+  # Specify Guest OS explicity to save time in detecting guest
+  # Vagrant detects guest everytime a guest specific capability is needed
+  config.vm.guest = :openbsd
+
+  config.vm.provider "utm" do |u|
+    u.name = "OpenBSD-7.6"
+    # We do not have a working QEMU guest agent
+    u.check_guest_additions = false
+  end
+end
