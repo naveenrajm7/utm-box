@@ -43,3 +43,23 @@ source "utm-iso" "vm" {
 
   output_directory = var.output_directory
 }
+
+source "utm-cloud" "vm" {
+  iso_url = var.iso_url
+  iso_checksum = var.iso_checksum
+  vm_arch = "${var.os_arch}"
+  vm_backend = "qemu"
+
+  memory = var.memory
+
+  // Path to a directory to serve using an HTTP server
+  // Required to launch http server
+  http_directory = var.http_directory == null ? "${path.root}/http/cloud/" : var.http_directory
+
+  ssh_username = var.ssh_username
+  ssh_password = var.ssh_password
+  ssh_timeout  = var.ssh_timeout
+
+  shutdown_command = var.shutdown_command
+  keep_registered = var.keep_registered
+}

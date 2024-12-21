@@ -48,7 +48,8 @@ variable "sources_enabled" {
   type = list(string)
   default = [
     "source.utm-iso.vm",
-    "source.utm-utm.vm"
+    "source.utm-utm.vm",
+    "source.utm-cloud.vm",
   ]
   description = "Build Sources to use for building vagrant boxes"
 }
