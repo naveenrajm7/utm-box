@@ -54,7 +54,7 @@ source "utm-cloud" "vm" {
 
   // Path to a directory to serve using an HTTP server
   // Required to launch http server
-  http_directory = var.http_directory == null ? "${path.root}/http/cloud/" : var.http_directory
+  http_directory = var.http_directory == null ? "${path.root}/http/${var.os_name}-cloud/" : var.http_directory
 
   ssh_username = var.ssh_username
   ssh_password = var.ssh_password

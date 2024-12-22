@@ -36,7 +36,11 @@ locals {
       ] : (
       var.os_name == "openbsd" ? [
           "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
+        ] : (
+        var.os_name == "fedora" ? [
+          "${path.root}/scripts/_common/sshd.sh",
         ] : []
+        )
       )
     )
   ) : var.scripts
