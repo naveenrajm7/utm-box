@@ -1,0 +1,43 @@
+#cloud-config
+hostname: ubuntu
+users:
+  - name: vagrant
+    gecos: Vagrant User
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    homedir: /home/vagrant
+    lock_passwd: false
+    passwd: '$6$rounds=4096$5CU3LEj/MQvbkfPb$LmKEF9pCfU8R.dA.GemgE/8GT6r9blge3grJvdsVTMFKyLEQwzEF3SGWqAzjawY/XHRpWj4fOiLBrRyxJhIRJ1'
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1YdxBpNlzxDqfJyw/QKow1F+wvG9hXGoqiysfJOn5Y vagrant insecure public key
+chpasswd:
+  users:
+    - {name: root, password: vagrant}
+  expire: false  
+ssh_pwauth: true
+network:
+  version: 2
+  ethernets:
+    all:
+      match:
+        name: en*
+      dhcp4: true
+
+# There is a cloud-init bug that causes network configuration to be ignored
+# in the first boot after instance creation
+
+# Workaround #1 for cloud-init bug
+# We avoid this as it causes the network to be reconfigured on every boot
+# # apply network config on every boot
+# updates:
+#   network:
+#     when: ['boot']
+
+# Workaround #2 for cloud-init bug
+runcmd:
+  - echo "Removing instance ID to reinitialize cloud-init"
+  - rm -f /var/lib/cloud/data/instance-id
+  - echo "Reinitializing cloud-init network configuration"
+  - cloud-init init --local
+  - echo "Applying netplan configuration"
+  - netplan apply

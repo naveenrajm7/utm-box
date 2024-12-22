@@ -175,3 +175,9 @@ variable "version" {
   default = null
   description = "Version of the vagrant box"
 }
+
+variable "box_name" {
+  type        = string
+  default = null
+  description = "Name of the vagrant box"
+}
