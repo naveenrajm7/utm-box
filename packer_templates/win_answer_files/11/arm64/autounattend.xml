@@ -702,8 +702,8 @@
                     <Description>Disable Computer Restore</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c E:\PTAgent.exe /install_silent</CommandLine>
-                    <Description>Install Parallels Desktop tools</Description>
+                    <CommandLine>cmd.exe /c E:\utm-guest-tools-0.229.exe /install_silent</CommandLine>
+                    <Description>Install SPICE tools</Description>
                     <Order>21</Order>
                 </SynchronousCommand>
             </FirstLogonCommands>
