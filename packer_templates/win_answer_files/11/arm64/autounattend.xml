@@ -605,7 +605,7 @@
                     <CommandLine>cmd.exe /c F:\utm-guest-tools-0.229.exe /S</CommandLine>
                     <Description>Install SPICE tools</Description>
                     <Order>1</Order>
-                </SynchronousCommand
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>%windir%\System32\WindowsPowerShell\v1.0\powershell.exe -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
                     <Description>Set Execution Policy 64 Bit</Description>
@@ -706,7 +706,6 @@
                     <CommandLine>powershell.exe -NoProfile -Command "Disable-ComputerRestore -Drive 'C:';"</CommandLine>
                     <Description>Disable Computer Restore</Description>
                 </SynchronousCommand>
->
             </FirstLogonCommands>
         </component>
         <component name="Microsoft-Windows-WinRE-RecoveryAgent" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
