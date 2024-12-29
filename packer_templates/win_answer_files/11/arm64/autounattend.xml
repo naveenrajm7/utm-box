@@ -702,7 +702,7 @@
                     <Description>Disable Computer Restore</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c E:\utm-guest-tools-0.229.exe /install_silent</CommandLine>
+                    <CommandLine>cmd.exe /c E:\utm-guest-tools-0.229.exe /S</CommandLine>
                     <Description>Install SPICE tools</Description>
                     <Order>21</Order>
                 </SynchronousCommand>
