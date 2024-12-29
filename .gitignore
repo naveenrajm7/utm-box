@@ -1,4 +1,8 @@
+# Files
+*.iso
+
 # Builds
+/builds/
 output-prepare/*
 output-vm/*
 

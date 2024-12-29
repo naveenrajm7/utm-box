@@ -147,6 +147,22 @@ variable "ssh_timeout" {
   default = "5m"
 }
 
+variable "winrm_password" {
+  type    = string
+  default = "vagrant"
+}
+
+variable "winrm_timeout" {
+  type    = string
+  default = "60m"
+}
+
+variable "winrm_username" {
+  type    = string
+  default = "vagrant"
+}
+
+# Source block provider specific variables
 # utm-utm 
 variable "utm_source_path" {
   type        = string
@@ -160,7 +176,27 @@ variable "utm_vm_name" {
   description = "Name of the UTM VM"
 }
 
-
+# utm-iso
+variable "uefi_boot" {
+  type    = bool
+  default = false
+}
+variable "disable_vnc" {
+  type    = bool
+  default = false
+}
+variable "hard_drive_interface" {
+  type    = string
+  default = "virtio"
+}
+variable "iso_interface" {
+  type    = string
+  default = "usb"
+}
+variable "guest_additions_mode" {
+  type    = string
+  default = null
+}
 
 # builder common block
 variable "scripts" {

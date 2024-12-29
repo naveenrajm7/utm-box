@@ -19,31 +19,35 @@ variable "hcp_client_secret" {
 
 locals {
   scripts = var.scripts == null ? (
-    var.os_name == "ubuntu" || var.os_name == "debian" ? [
-      "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",
-      "${path.root}/scripts/_common/sshd.sh",
-      "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
-      "${path.root}/scripts/_common/vagrant.sh",
-      "${path.root}/scripts/_common/utm.sh",
-      "${path.root}/scripts/${var.os_name}/cleanup_${var.os_name}.sh",
-    ] : (
-    var.os_name == "arch" ? [
+    var.is_windows ? [
+      "${path.root}/scripts/windows/eject-media.ps1"
+      ] : (
+      var.os_name == "ubuntu" || var.os_name == "debian" ? [
         "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",
         "${path.root}/scripts/_common/sshd.sh",
         "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
         "${path.root}/scripts/_common/vagrant.sh",
         "${path.root}/scripts/_common/utm.sh",
+        "${path.root}/scripts/${var.os_name}/cleanup_${var.os_name}.sh",
       ] : (
-      var.os_name == "openbsd" ? [
-          "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
-        ] : (
-        var.os_name == "fedora" ? [
+      var.os_name == "arch" ? [
+          "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",
           "${path.root}/scripts/_common/sshd.sh",
-        ] : []
+          "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
+          "${path.root}/scripts/_common/vagrant.sh",
+          "${path.root}/scripts/_common/utm.sh",
+        ] : (
+        var.os_name == "openbsd" ? [
+            "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
+          ] : (
+          var.os_name == "fedora" ? [
+            "${path.root}/scripts/_common/sshd.sh",
+          ] : []
+          )
         )
       )
-    )
-  ) : var.scripts
+    ) 
+  ): var.scripts
 
   source_names = [for source in var.sources_enabled : trimprefix(source, "source.")]
 }
@@ -100,7 +104,7 @@ build {
     post-processor "vagrant-registry" {
       client_id     = "${var.hcp_client_id}"
       client_secret = "${var.hcp_client_secret}"
-      box_tag       = "utm/${var.os_name}-${var.os_version}"
+      box_tag       = "utm/${var.box_name}"
       version       = "${var.version}"
       architecture  = "arm64"
     }
