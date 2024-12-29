@@ -53,7 +53,9 @@ source "utm-iso" "vm" {
   vm_arch = "${var.os_arch}"
   vm_backend = "qemu"
   uefi_boot = local.uefi_boot
+  hypervisor = var.hypervisor
   hard_drive_interface = var.hard_drive_interface
+  iso_interface = var.iso_interface
 
   # Source block common options
   iso_url = var.iso_url

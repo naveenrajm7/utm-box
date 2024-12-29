@@ -179,7 +179,11 @@ variable "utm_vm_name" {
 # utm-iso
 variable "uefi_boot" {
   type    = bool
-  default = false
+  default = true
+}
+variable "hypervisor" {
+  type    = bool
+  default = true
 }
 variable "disable_vnc" {
   type    = bool
