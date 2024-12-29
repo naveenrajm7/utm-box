@@ -602,110 +602,111 @@
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c F:\utm-guest-tools-0.229.exe /S</CommandLine>
+                    <Description>Install SPICE tools</Description>
+                    <Order>1</Order>
+                </SynchronousCommand
+                <SynchronousCommand wcm:action="add">
                     <CommandLine>%windir%\System32\WindowsPowerShell\v1.0\powershell.exe -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
                     <Description>Set Execution Policy 64 Bit</Description>
-                    <Order>1</Order>
+                    <Order>2</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>%windir%\SysWOW64\cmd.exe /c powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
                     <Description>Set Execution Policy 32 Bit</Description>
-                    <Order>2</Order>
+                    <Order>3</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>3</Order>
+                    <Order>4</Order>
                     <CommandLine>%windir%\System32\WindowsPowerShell\v1.0\powershell.exe -Command Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory "Private"</CommandLine>
                     <Description>Sets detected network connections to private to allow start of winrm</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>4</Order>
+                    <Order>5</Order>
                     <CommandLine>%windir%\System32\WindowsPowerShell\v1.0\powershell.exe -Command Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any</CommandLine>
                     <Description>Allows winrm over public profile interfaces</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>5</Order>
+                    <Order>6</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm quickconfig -q</CommandLine>
                     <Description>winrm quickconfig -q</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>6</Order>
+                    <Order>7</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm quickconfig -transport:http</CommandLine>
                     <Description>winrm quickconfig -transport:http</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>7</Order>
+                    <Order>8</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config @{MaxTimeoutms="1800000"}</CommandLine>
                     <Description>Win RM MaxTimoutms</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>8</Order>
+                    <Order>9</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config/winrs @{MaxMemoryPerShellMB="2048"}</CommandLine>
                     <Description>Win RM MaxMemoryPerShellMB</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>9</Order>
+                    <Order>10</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
                     <Description>Win RM AllowUnencrypted</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>10</Order>
+                    <Order>11</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
                     <Description>Win RM auth Basic</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>11</Order>
+                    <Order>12</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config/client/auth @{Basic="true"}</CommandLine>
                     <Description>Win RM client auth Basic</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>12</Order>
+                    <Order>13</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="5985"}</CommandLine>
                     <Description>Win RM listener Address/Port</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>13</Order>
+                    <Order>14</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c netsh firewall add portopening TCP 5985 "Port 5985"</CommandLine>
                     <Description>Win RM port open</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>14</Order>
+                    <Order>15</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c net stop winrm</CommandLine>
                     <Description>Stop Win RM Service</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>15</Order>
+                    <Order>16</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c sc config winrm start= auto</CommandLine>
                     <Description>Win RM Autostart</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>16</Order>
+                    <Order>17</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c net start winrm</CommandLine>
                     <Description>Start Win RM Service</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>17</Order>
+                    <Order>18</Order>
                     <CommandLine>%windir%\System32\cmd.exe /c wmic useraccount where "name='vagrant'" set PasswordExpires=FALSE</CommandLine>
                     <Description>Disable password expiration for vagrant user</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d "vagrant" /f</CommandLine>
-                    <Order>18</Order>
-                    <Description>Enable AutoLogon</Description>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>%SystemRoot%\System32\reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f</CommandLine>
                     <Order>19</Order>
                     <Description>Enable AutoLogon</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\reg.exe ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f</CommandLine>
                     <Order>20</Order>
+                    <Description>Enable AutoLogon</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>21</Order>
                     <CommandLine>powershell.exe -NoProfile -Command "Disable-ComputerRestore -Drive 'C:';"</CommandLine>
                     <Description>Disable Computer Restore</Description>
                 </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c F:\utm-guest-tools-0.229.exe /S</CommandLine>
-                    <Description>Install SPICE tools</Description>
-                    <Order>21</Order>
-                </SynchronousCommand>
+>
             </FirstLogonCommands>
         </component>
         <component name="Microsoft-Windows-WinRE-RecoveryAgent" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
