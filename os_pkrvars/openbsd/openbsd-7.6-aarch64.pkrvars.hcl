@@ -10,3 +10,8 @@ boot_command            = ["<wait>A<enter><wait5><enter><wait5>http://192.168.75
 ssh_timeout             = "10m"
 # Assumes ssh user (vagrant) exists and can doas without password
 shutdown_command        = "doas -u root shutdown -p now"
+
+# UTM 
+uefi_boot               = true
+# Not supported by UTM API
+display                 = "virtio-ramfb"
