@@ -26,7 +26,7 @@ trap {
     # Disable error reporting popups
     {Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\Windows Error Reporting' -Name DontShowUI -Type DWORD -Value 0}
     # Disable prompting for a shutdown reason
-    {Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability' -Name ShutdownReasonOn -Type DWORD -Value 0}
+    # {Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability' -Name ShutdownReasonOn -Type DWORD -Value 0}
     # Set visual effects to best performance
     {Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects' -Name VisualFXSetting -Type DWORD -Value 2}
     # Dont use visual styles on windows and buttons

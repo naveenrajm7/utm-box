@@ -57,53 +57,53 @@ if (!(New-Object System.Security.Principal.WindowsPrincipal(
 Add-Type -A System.IO.Compression.FileSystem
 
 # install Guest Additions.
-$systemVendor = (Get-CimInstance -ClassName Win32_ComputerSystemProduct -Property Vendor).Vendor
-if ($systemVendor -eq 'QEMU') {
-    # in more recent virtio-win.iso virtio-win-guest-tools.exe has move to E:\
-    $guestToolsPath = dir -Path E:\ -Filter virtio-win-guest-tools.exe -Recurse | %{$_.FullName}
-    if (!$guestToolsPath) {
-        throw "did not find virtio-win-guest-tools.exe on E:\"
-    }
-    $guestToolsLog = "$env:TEMP\$(Split-Path -Leaf $guestToolsPath).log"
-    Write-Host 'Installing the guest tools...'
-    &$guestToolsPath /install /norestart /quiet /log $guestToolsLog | Out-String -Stream
-    if ($LASTEXITCODE) {
-        throw "failed to install guest tools with exit code $LASTEXITCODE"
-    }
-    Write-Host "Done installing the guest tools."
-} elseif ($systemVendor -eq 'innotek GmbH') {
-    Write-Host 'Importing the Oracle (for VirtualBox) certificate as a Trusted Publisher...'
-    E:\cert\VBoxCertUtil.exe add-trusted-publisher E:\cert\vbox-sha1.cer
-    if ($LASTEXITCODE) {
-        throw "failed to import certificate with exit code $LASTEXITCODE"
-    }
+# $systemVendor = (Get-CimInstance -ClassName Win32_ComputerSystemProduct -Property Vendor).Vendor
+# if ($systemVendor -eq 'QEMU') {
+#     # in more recent virtio-win.iso virtio-win-guest-tools.exe has move to E:\
+#     $guestToolsPath = dir -Path E:\ -Filter virtio-win-guest-tools.exe -Recurse | %{$_.FullName}
+#     if (!$guestToolsPath) {
+#         throw "did not find virtio-win-guest-tools.exe on E:\"
+#     }
+#     $guestToolsLog = "$env:TEMP\$(Split-Path -Leaf $guestToolsPath).log"
+#     Write-Host 'Installing the guest tools...'
+#     &$guestToolsPath /install /norestart /quiet /log $guestToolsLog | Out-String -Stream
+#     if ($LASTEXITCODE) {
+#         throw "failed to install guest tools with exit code $LASTEXITCODE"
+#     }
+#     Write-Host "Done installing the guest tools."
+# } elseif ($systemVendor -eq 'innotek GmbH') {
+#     Write-Host 'Importing the Oracle (for VirtualBox) certificate as a Trusted Publisher...'
+#     E:\cert\VBoxCertUtil.exe add-trusted-publisher E:\cert\vbox-sha1.cer
+#     if ($LASTEXITCODE) {
+#         throw "failed to import certificate with exit code $LASTEXITCODE"
+#     }
 
-    Write-Host 'Installing the VirtualBox Guest Additions...'
-    E:\VBoxWindowsAdditions-amd64.exe /S | Out-String -Stream
-    if ($LASTEXITCODE) {
-        throw "failed to install with exit code $LASTEXITCODE. Check the logs at C:\Program Files\Oracle\VirtualBox Guest Additions\install.log."
-    }
-} elseif ($systemVendor -eq 'Microsoft Corporation') {
-    # do nothing. Hyper-V enlightments are already bundled with Windows.
-} elseif ($systemVendor -eq 'VMware, Inc.') {
-    Write-Host 'Mounting VMware Tools ISO...'
-    Mount-DiskImage -ImagePath C:\vmware-tools.iso -PassThru | Get-Volume
-    Write-Host 'Installing VMware Tools...'
-    Start-Process -Wait -FilePath E:\setup64.exe -ArgumentList '/S /v "/qn REBOOT=R"'
-    Write-Output 'Installing VMware Tools...'
-    # silent install without rebooting.
-    E:\setup64.exe /S /v '/qn reboot=r'| Out-String -Stream
-    Dismount-DiskImage -ImagePath C:\vmware-tools.iso
-    Remove-Item C:\vmware-tools.iso
-} elseif ($systemVendor -eq 'Parallels Software International Inc.') {
-    Write-Host 'Installing the Parallels Tools for Guest VM...'
-    E:\PTAgent.exe /install_silent | Out-String -Stream
-    if ($LASTEXITCODE) {
-        throw "failed to install with exit code $LASTEXITCODE. Check the logs at C:\Program Files\Oracle\VirtualBox Guest Additions\install.log."
-    }
-} else {
-    Write-Host "Cannot install Guest Additions: Unsupported system ($systemVendor)."
-}
+#     Write-Host 'Installing the VirtualBox Guest Additions...'
+#     E:\VBoxWindowsAdditions-amd64.exe /S | Out-String -Stream
+#     if ($LASTEXITCODE) {
+#         throw "failed to install with exit code $LASTEXITCODE. Check the logs at C:\Program Files\Oracle\VirtualBox Guest Additions\install.log."
+#     }
+# } elseif ($systemVendor -eq 'Microsoft Corporation') {
+#     # do nothing. Hyper-V enlightments are already bundled with Windows.
+# } elseif ($systemVendor -eq 'VMware, Inc.') {
+#     Write-Host 'Mounting VMware Tools ISO...'
+#     Mount-DiskImage -ImagePath C:\vmware-tools.iso -PassThru | Get-Volume
+#     Write-Host 'Installing VMware Tools...'
+#     Start-Process -Wait -FilePath E:\setup64.exe -ArgumentList '/S /v "/qn REBOOT=R"'
+#     Write-Output 'Installing VMware Tools...'
+#     # silent install without rebooting.
+#     E:\setup64.exe /S /v '/qn reboot=r'| Out-String -Stream
+#     Dismount-DiskImage -ImagePath C:\vmware-tools.iso
+#     Remove-Item C:\vmware-tools.iso
+# } elseif ($systemVendor -eq 'Parallels Software International Inc.') {
+#     Write-Host 'Installing the Parallels Tools for Guest VM...'
+#     E:\PTAgent.exe /install_silent | Out-String -Stream
+#     if ($LASTEXITCODE) {
+#         throw "failed to install with exit code $LASTEXITCODE. Check the logs at C:\Program Files\Oracle\VirtualBox Guest Additions\install.log."
+#     }
+# } else {
+#     Write-Host "Cannot install Guest Additions: Unsupported system ($systemVendor)."
+# }
 
 Write-Host 'Setting the vagrant account properties...'
 # see the ADS_USER_FLAG_ENUM enumeration at https://msdn.microsoft.com/en-us/library/aa772300(v=vs.85).aspx
