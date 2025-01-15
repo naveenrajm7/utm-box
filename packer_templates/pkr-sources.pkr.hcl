@@ -95,12 +95,22 @@ source "utm-cloud" "vm" {
   iso_checksum = var.iso_checksum
   vm_arch = "${var.os_arch}"
   vm_backend = "qemu"
-
+  uefi_boot = local.uefi_boot
+  hypervisor = var.hypervisor
   memory = var.memory
 
   // Path to a directory to serve using an HTTP server
   // Required to launch http server
   http_directory = var.http_directory == null ? "${path.root}/http/${var.os_name}-cloud/" : var.http_directory
+
+  // Required to use CD as a source for cloud-init
+  use_cd = true 
+  // Required to pass the cloud-init file as a cd file
+  cd_files             = local.cd_files
+  // Required to for cloud-init to identify the cd file
+  cd_label             = "cidata"
+  // Required to resize the cloud image
+  resize_cloud_image = true
 
   ssh_username = var.ssh_username
   ssh_password = var.ssh_password
