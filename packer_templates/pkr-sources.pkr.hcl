@@ -87,6 +87,8 @@ source "utm-iso" "vm" {
   shutdown_command = var.shutdown_command
   keep_registered = var.keep_registered
 
+  # Skip the pause before exporting the VM
+  export_nopause = true
   output_directory = var.output_directory
 }
 
