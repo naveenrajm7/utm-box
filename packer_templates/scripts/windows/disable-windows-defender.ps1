@@ -34,31 +34,17 @@ trap {
     Exit 1
 }
 
-
-#
-# enable TLS 1.2.
-
-[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol `
-    -bor [Net.SecurityProtocolType]::Tls12
-
-
-#
-# eject removable volume media.
-
-$volList = Get-Volume | Where-Object {$_.DriveType -ne 'Fixed' -and $_.DriveLetter}
-
-ForEach ($vol in $volList) {
-    $volLetter = $vol.DriveLetter
-    Write-Host "Ejecting drive ${volLetter}:"
-
-    try {
-        $Eject = New-Object -comObject Shell.Application
-
-        # Namespace 17 represents ssfDRIVES
-        # See: https://learn.microsoft.com/en-us/windows/win32/api/shldisp/ne-shldisp-shellspecialfolderconstants
-
-        $Eject.NameSpace(17).ParseName("${volLetter}:").InvokeVerb("Eject")
-    } finally {
-        [System.Runtime.InteropServices.Marshal]::ReleaseComObject($Eject) | Out-Null
-    }
+Write-Host 'Disabling Windows Defender'
+if (Get-Command -ErrorAction SilentlyContinue Uninstall-WindowsFeature) {
+    # for Windows Server.
+    Get-WindowsFeature 'Windows-Defender*' | Uninstall-WindowsFeature
+} else {
+    # for Windows Client.
+    Set-MpPreference `
+        -DisableRealtimeMonitoring $true `
+        -ExclusionPath @('C:\', 'D:\')
+    Set-ItemProperty `
+        -Path 'HKLM:/SOFTWARE/Policies/Microsoft/Windows Defender' `
+        -Name DisableAntiSpyware `
+        -Value 1
 }
