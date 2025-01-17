@@ -4,4 +4,5 @@
 trap 'exit 0' EXIT
 
 # https://wiki.debian.org/QEMU
-dd if=/dev/zero of=/tmp/junk ; sync ; rm /tmp/junk
+# This will be slow in x86_64 VMs and result in increased image size
+# dd if=/dev/zero of=/tmp/junk ; sync ; rm /tmp/junk

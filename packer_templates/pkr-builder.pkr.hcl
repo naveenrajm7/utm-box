@@ -131,6 +131,7 @@ build {
     vagrantfile_template = var.is_windows ? "${path.root}/vagrantfile-windows.template" : (
       var.os_name == "freebsd" ? "${path.root}/vagrantfile-freebsd.template" : null
     )
+    architecture = "${var.os_arch == "x86_64" ? "amd64" : var.os_arch == "aarch64" ? "arm64" : var.os_arch}"
   }
 
   # To feed artifact to 'vagrant-registry' post-processor
@@ -150,7 +151,7 @@ build {
       client_secret = "${var.hcp_client_secret}"
       box_tag       = "utm/${var.box_name}"
       version       = "${var.version}"
-      architecture  = "arm64"
+      architecture  = "${var.os_arch == "x86_64" ? "amd64" : var.os_arch == "aarch64" ? "arm64" : var.os_arch}"
     }
   }
   
