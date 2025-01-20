@@ -87,8 +87,12 @@ source "utm-iso" "vm" {
   shutdown_command = var.shutdown_command
   keep_registered = var.keep_registered
 
-  # Skip the pause before exporting the VM
-  export_nopause = true
+  # Skip the pause steps during build
+  display_nopause = var.display_nopause
+  boot_nopause    = var.boot_nopause
+  export_nopause  = var.export_nopause
+
+
   output_directory = var.output_directory
 }
 
@@ -105,7 +109,7 @@ source "utm-cloud" "vm" {
   // Required to launch http server
   http_directory = var.http_directory == null ? "${path.root}/http/${var.os_name}-cloud/" : var.http_directory
 
-  // Required to use CD as a source for cloud-init
+  // Required to use CD as a source for cloud-init, default source is http
   use_cd = true 
   // Required to pass the cloud-init file as a cd file
   cd_files             = local.cd_files
@@ -117,6 +121,11 @@ source "utm-cloud" "vm" {
   ssh_username = var.ssh_username
   ssh_password = var.ssh_password
   ssh_timeout  = var.ssh_timeout
+
+  # Skip the pause steps during build
+  display_nopause = var.display_nopause
+  boot_nopause    = var.boot_nopause
+  export_nopause  = var.export_nopause
 
   shutdown_command = var.shutdown_command
   keep_registered = var.keep_registered

@@ -221,3 +221,19 @@ variable "box_name" {
   default = null
   description = "Name of the vagrant box"
 }
+
+# pause variables
+variable "display_nopause" {
+  type    = bool
+  default = false
+}
+
+variable "boot_nopause" {
+  type    = bool
+  default = false
+}
+
+variable "export_nopause" {
+  type    = bool
+  default = false
+}
