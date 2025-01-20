@@ -33,7 +33,8 @@ network:
 #   network:
 #     when: ['boot']
 
-# Workaround #2 for cloud-init bug
+# Workaround #2 for cloud-init bug , manually reinitialize cloud-init
+# We also disable cloud-init after reinitializing it, to improve boot time
 runcmd:
   - echo "Removing instance ID to reinitialize cloud-init"
   - rm -f /var/lib/cloud/data/instance-id
@@ -41,3 +42,5 @@ runcmd:
   - cloud-init init --local
   - echo "Applying netplan configuration"
   - netplan apply
+  - echo "Disabling cloud-init"
+  - touch /etc/cloud/cloud-init.disabled
