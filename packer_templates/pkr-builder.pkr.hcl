@@ -127,7 +127,7 @@ build {
   # Convert machines to vagrant boxes
   post-processor "utm-vagrant" {
     compression_level = 9
-    output            = "${path.root}/../builds/${var.os_name}-${var.os_version}.box"
+    output            = "${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"
     vagrantfile_template = var.is_windows ? "${path.root}/vagrantfile-windows.template" : (
       var.os_name == "freebsd" ? "${path.root}/vagrantfile-freebsd.template" : null
     )
@@ -142,7 +142,7 @@ build {
     # artifice post-processor, vagrant post-processor, or vagrant builder
     # so we need to use 'artifice' post-processor to create an artifact
     post-processor "artifice" {
-      files = ["${path.root}/../builds/${var.os_name}-${var.os_version}.box"]
+      files = ["${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"]
     }
 
     # Upload the box to Vagrant Registry
