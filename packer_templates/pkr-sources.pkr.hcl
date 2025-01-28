@@ -104,6 +104,7 @@ source "utm-cloud" "vm" {
   uefi_boot = local.uefi_boot
   hypervisor = var.hypervisor
   memory = var.memory
+  vm_name = "vagrant-${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYY-MM-DD_hhmmss_ZZZ", timestamp())}"
 
   // Path to a directory to serve using an HTTP server
   // Required to launch http server
