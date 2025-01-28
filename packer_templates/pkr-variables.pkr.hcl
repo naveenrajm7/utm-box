@@ -76,6 +76,11 @@ variable "cd_files" {
   default = null
 }
 
+variable "cd_label" {
+  type    = string
+  default = "cidata"
+}
+
 variable "cpus" {
   type    = number
   default = 2
