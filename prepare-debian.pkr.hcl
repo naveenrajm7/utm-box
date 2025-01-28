@@ -6,7 +6,7 @@ packer {
     }
     ansible = {
       version = "~> 1"
-      source = "github.com/hashicorp/ansible"
+      source  = "github.com/hashicorp/ansible"
     }
   }
 }
@@ -14,12 +14,12 @@ packer {
 # Prepare the UTM VM with vagrant user
 # So it can run other vagrant specific tasks as vagrant user
 source "utm-utm" "prepare" {
-  source_path = "/Users/naveenrajm/Developer/UTMvagrant/utm_gallery/Debian11G.utm"
-  vm_name = "Debian11G"
-  ssh_username = "debian"
-  ssh_password = "debian"
+  source_path      = "/Users/naveenrajm/Developer/UTMvagrant/utm_gallery/Debian11G.utm"
+  vm_name          = "Debian11G"
+  ssh_username     = "debian"
+  ssh_password     = "debian"
   shutdown_command = "echo 'debian' | sudo -S /sbin/halt -h -p"
-  keep_registered = true
+  keep_registered  = true
 }
 
 build {
@@ -31,7 +31,7 @@ build {
   // ideally this should be added in auto install script
   // We use 'vagrant' user to run other vagrant specific tasks
   provisioner "shell" {
-    script= "${path.root}/packer_templates/scripts/_common/add-vagrant-user.sh"
+    script          = "${path.root}/packer_templates/scripts/_common/add-vagrant-user.sh"
     execute_command = "echo 'debian' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
   }
 

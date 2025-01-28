@@ -10,7 +10,7 @@ locals {
   ) : var.uefi_boot
 
   guest_additions_mode = var.guest_additions_mode == null ? (
-  var.is_windows ? "attach" : "upload"
+    var.is_windows ? "attach" : "upload"
   ) : var.guest_additions_mode
 
   # Source block common
@@ -37,12 +37,12 @@ locals {
 }
 
 source "utm-utm" "vm" {
-  source_path = var.utm_source_path
-  vm_name = var.utm_vm_name
-  ssh_username = var.ssh_username
-  ssh_password = var.ssh_password
+  source_path      = var.utm_source_path
+  vm_name          = var.utm_vm_name
+  ssh_username     = var.ssh_username
+  ssh_password     = var.ssh_password
   shutdown_command = var.shutdown_command
-  keep_registered = var.keep_registered
+  keep_registered  = var.keep_registered
 
   output_directory = var.output_directory
 
@@ -50,21 +50,21 @@ source "utm-utm" "vm" {
 
 source "utm-iso" "vm" {
   # UTM specific options
-  vm_arch = "${var.os_arch}"
-  vm_backend = "qemu"
-  uefi_boot = local.uefi_boot
-  hypervisor = var.hypervisor
+  vm_arch              = "${var.os_arch}"
+  vm_backend           = "qemu"
+  uefi_boot            = local.uefi_boot
+  hypervisor           = var.hypervisor
   hard_drive_interface = var.hard_drive_interface
-  iso_interface = var.iso_interface
+  iso_interface        = var.iso_interface
 
   # Source block common options
-  iso_url = var.iso_url
+  iso_url      = var.iso_url
   iso_checksum = var.iso_checksum
 
   memory = var.memory
 
   boot_command = var.boot_command
-  boot_wait = var.boot_wait == null ? local.default_boot_wait : var.boot_wait
+  boot_wait    = var.boot_wait == null ? local.default_boot_wait : var.boot_wait
 
 
   // Path to a directory to serve using an HTTP server
@@ -78,14 +78,14 @@ source "utm-iso" "vm" {
   ssh_password = var.ssh_password
   ssh_timeout  = var.ssh_timeout
 
-  winrm_password   = var.winrm_password
-  winrm_timeout    = var.winrm_timeout
-  winrm_username   = var.winrm_username
+  winrm_password = var.winrm_password
+  winrm_timeout  = var.winrm_timeout
+  winrm_username = var.winrm_username
 
   disable_vnc = var.disable_vnc
 
   shutdown_command = var.shutdown_command
-  keep_registered = var.keep_registered
+  keep_registered  = var.keep_registered
 
   # Skip the pause steps during build
   display_nopause = var.display_nopause
@@ -97,26 +97,26 @@ source "utm-iso" "vm" {
 }
 
 source "utm-cloud" "vm" {
-  iso_url = var.iso_url
+  iso_url      = var.iso_url
   iso_checksum = var.iso_checksum
-  vm_arch = "${var.os_arch}"
-  vm_backend = "qemu"
-  uefi_boot = local.uefi_boot
-  hypervisor = var.hypervisor
-  memory = var.memory
-  disk_size = var.disk_size
-  vm_name = "vagrant-${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYY-MM-DD_hhmmss_ZZZ", timestamp())}"
+  vm_arch      = "${var.os_arch}"
+  vm_backend   = "qemu"
+  uefi_boot    = local.uefi_boot
+  hypervisor   = var.hypervisor
+  memory       = var.memory
+  disk_size    = var.disk_size
+  vm_name      = "vagrant-${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYY-MM-DD_hhmmss_ZZZ", timestamp())}"
 
   // Path to a directory to serve using an HTTP server
   // Required to launch http server
   http_directory = var.http_directory == null ? "${path.root}/http/${var.os_name}-cloud/" : var.http_directory
 
   // Required to use CD as a source for cloud-init, default source is http
-  use_cd = true 
+  use_cd = true
   // Required to pass the cloud-init file as a cd file
-  cd_files             = local.cd_files
+  cd_files = local.cd_files
   // Required to for cloud-init to identify the cd file
-  cd_label             = "cidata"
+  cd_label = "cidata"
   // Required to resize the cloud image
   resize_cloud_image = true
 
@@ -130,5 +130,5 @@ source "utm-cloud" "vm" {
   export_nopause  = var.export_nopause
 
   shutdown_command = var.shutdown_command
-  keep_registered = var.keep_registered
+  keep_registered  = var.keep_registered
 }

@@ -129,7 +129,7 @@ variable "output_directory" {
 }
 
 variable "shutdown_command" {
-  type        = string
+  type = string
 }
 
 variable "shutdown_timeout" {
@@ -217,13 +217,13 @@ variable "scripts" {
 # post-processor common block
 variable "version" {
   type        = string
-  default = null
+  default     = null
   description = "Version of the vagrant box"
 }
 
 variable "box_name" {
   type        = string
-  default = null
+  default     = null
   description = "Name of the vagrant box"
 }
 
