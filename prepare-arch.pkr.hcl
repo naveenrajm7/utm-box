@@ -10,12 +10,12 @@ packer {
 # Prepare the UTM VM with vagrant user
 # So it can run other vagrant specific tasks as vagrant user
 source "utm-utm" "prepare" {
-  source_path = "/Users/naveenrajm/Developer/UTMvagrant/utm_gallery/ArchLinux.utm"
-  vm_name = "ArchLinux"
-  ssh_username = "root"
-  ssh_password = "root"
+  source_path      = "/Users/naveenrajm/Developer/UTMvagrant/utm_gallery/ArchLinux.utm"
+  vm_name          = "ArchLinux"
+  ssh_username     = "root"
+  ssh_password     = "root"
   shutdown_command = "echo 'root' | /sbin/halt -h -p"
-  keep_registered = true
+  keep_registered  = true
 }
 
 build {
@@ -27,7 +27,7 @@ build {
   // ideally this should be added in auto install script
   // We use 'vagrant' user to run other vagrant specific tasks
   provisioner "shell" {
-    script= "${path.root}/packer_templates/scripts/arch/add-vagrant-user.sh"
+    script          = "${path.root}/packer_templates/scripts/arch/add-vagrant-user.sh"
     execute_command = "echo 'root' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
   }
 

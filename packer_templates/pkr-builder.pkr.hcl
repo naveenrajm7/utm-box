@@ -41,25 +41,25 @@ locals {
         "${path.root}/scripts/_common/vagrant.sh",
         "${path.root}/scripts/_common/utm.sh",
         "${path.root}/scripts/${var.os_name}/cleanup_${var.os_name}.sh",
-      ] : (
-      var.os_name == "arch" ? [
+        ] : (
+        var.os_name == "arch" ? [
           "${path.root}/scripts/${var.os_name}/update_${var.os_name}.sh",
           "${path.root}/scripts/_common/sshd.sh",
           "${path.root}/scripts/${var.os_name}/sudoers_${var.os_name}.sh",
           "${path.root}/scripts/_common/vagrant.sh",
           "${path.root}/scripts/_common/utm.sh",
-        ] : (
-        var.os_name == "openbsd" ? [
-            "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
           ] : (
-          var.os_name == "fedora" ? [
-            "${path.root}/scripts/_common/sshd.sh",
-          ] : []
+          var.os_name == "openbsd" ? [
+            "${path.root}/scripts/${var.os_name}/doas_${var.os_name}.sh",
+            ] : (
+            var.os_name == "fedora" ? [
+              "${path.root}/scripts/_common/sshd.sh",
+            ] : []
           )
         )
       )
-    ) 
-  ): var.scripts
+    )
+  ) : var.scripts
 
   source_names = [for source in var.sources_enabled : trimprefix(source, "source.")]
 }
@@ -71,13 +71,13 @@ build {
   provisioner "shell" {
     environment_vars = [
       "HOME_DIR=/home/vagrant",
-        "http_proxy=${var.http_proxy}",
-        "https_proxy=${var.https_proxy}",
-        "no_proxy=${var.no_proxy}"
-      ]
-  
-    execute_command   = ( 
-      var.os_name == "openbsd" ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" : 
+      "http_proxy=${var.http_proxy}",
+      "https_proxy=${var.https_proxy}",
+      "no_proxy=${var.no_proxy}"
+    ]
+
+    execute_command = (
+      var.os_name == "openbsd" ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" :
       "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
     )
     expect_disconnect = true
@@ -127,7 +127,7 @@ build {
   # Convert machines to vagrant boxes
   post-processor "utm-vagrant" {
     compression_level = 9
-    output            = "${path.root}/../builds/${var.os_name}-${var.os_version}.box"
+    output            = "${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"
     vagrantfile_template = var.is_windows ? "${path.root}/vagrantfile-windows.template" : (
       var.os_name == "freebsd" ? "${path.root}/vagrantfile-freebsd.template" : null
     )
@@ -142,7 +142,7 @@ build {
     # artifice post-processor, vagrant post-processor, or vagrant builder
     # so we need to use 'artifice' post-processor to create an artifact
     post-processor "artifice" {
-      files = ["${path.root}/../builds/${var.os_name}-${var.os_version}.box"]
+      files = ["${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"]
     }
 
     # Upload the box to Vagrant Registry
@@ -154,5 +154,5 @@ build {
       architecture  = "${var.os_arch == "x86_64" ? "amd64" : var.os_arch == "aarch64" ? "arm64" : var.os_arch}"
     }
   }
-  
+
 }
