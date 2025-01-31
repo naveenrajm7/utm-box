@@ -61,6 +61,17 @@ locals {
     )
   ) : var.scripts
 
+  gallery_scripts = var.gallery_scripts == null ? (
+    var.os_name == "ubuntu" || var.os_name == "debian" ? [
+      "${path.root}/scripts/${var.os_name}/configure-dhcp_${var.os_name}.sh",
+      "${path.root}/scripts/${var.os_name}/install-gnome_${var.os_name}.sh",
+      ] : (
+      var.os_name == "fedora" ? [
+        "${path.root}/scripts/${var.os_name}/install-gnome_${var.os_name}.sh",
+      ] : []
+    )
+  ) : var.gallery_scripts
+
   source_names = [for source in var.sources_enabled : trimprefix(source, "source.")]
 }
 
@@ -83,6 +94,24 @@ build {
     expect_disconnect = true
     scripts           = local.scripts
     except            = var.is_windows ? local.source_names : null
+  }
+
+  # Additional provisioner for gallery
+  provisioner "shell" {
+    environment_vars = [
+      "HOME_DIR=/home/vagrant",
+      "http_proxy=${var.http_proxy}",
+      "https_proxy=${var.https_proxy}",
+      "no_proxy=${var.no_proxy}"
+    ]
+
+    execute_command = (
+      var.os_name == "openbsd" ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" :
+      "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
+    )
+    expect_disconnect = true
+    scripts           = var.for_gallery ? local.gallery_scripts : []
+    only              = var.for_gallery ? ["*"] : []
   }
 
   # Windows Updates and scripts

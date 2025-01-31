@@ -49,6 +49,7 @@ source "utm-utm" "vm" {
 }
 
 source "utm-iso" "vm" {
+  vm_name      = "${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYY-MM-DD_hhmmss_ZZZ", timestamp())}"
   # UTM specific options
   vm_arch              = "${var.os_arch}"
   vm_backend           = "qemu"

@@ -242,3 +242,14 @@ variable "export_nopause" {
   type    = bool
   default = false
 }
+
+## Packer build config variables
+variable "for_gallery" {
+  type    = bool
+  default = false
+}
+
+variable "gallery_scripts" {
+  type    = list(string)
+  default = null
+}
