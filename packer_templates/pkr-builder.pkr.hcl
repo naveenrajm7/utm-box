@@ -54,6 +54,8 @@ locals {
             ] : (
             var.os_name == "fedora" ? [
               "${path.root}/scripts/_common/sshd.sh",
+              "${path.root}/scripts/_common/vagrant.sh",
+              "${path.root}/scripts/_common/utm.sh",
             ] : []
           )
         )
@@ -110,8 +112,8 @@ build {
       "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
     )
     expect_disconnect = true
-    scripts           = var.for_gallery ? local.gallery_scripts : []
-    only              = var.for_gallery ? ["*"] : []
+    scripts           = local.gallery_scripts
+    only              = var.for_gallery ? local.source_names : null
   }
 
   # Windows Updates and scripts
@@ -174,6 +176,20 @@ build {
       files = ["${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"]
     }
 
+    # Create a checksum file for the box
+    # post-processor "checksum" {
+    #   checksum_types = ["sha512"]
+    #   output = "packer_{{.BuildName}}_{{.ChecksumType}}.checksum"
+    # }
+
+    # Not able to pass checksum to vagrant-registry, might need seperate upload script
+    # post-processor "shell-local" {
+    #   inline = [
+    #     "CHECKSUM=$(awk '{print $1}' packer_{{ .BuildName }}_sha512.checksum)",
+    #     "echo sha512:$CHECKSUM > packer_{{ .BuildName }}_sha512.final"
+    #   ]
+    # }
+
     # Upload the box to Vagrant Registry
     post-processor "vagrant-registry" {
       client_id     = "${var.hcp_client_id}"
@@ -181,6 +197,8 @@ build {
       box_tag       = "utm/${var.box_name}"
       version       = "${var.version}"
       architecture  = "${var.os_arch == "x86_64" ? "amd64" : var.os_arch == "aarch64" ? "arm64" : var.os_arch}"
+      # checksum not working 
+      # box_checksum  = file("../packer_basic-example_sha512.final")
     }
   }
 
