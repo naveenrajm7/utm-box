@@ -15,10 +15,14 @@ iso_checksum = "file:https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/S
 # Install with speech synthesis  (Need Sound Card for this to work)
 # to avoid black screen issue with other methods
 # use interface=enp0s2 to get dhcp and packer to connect via ssh (emulated)
-boot_command     = ["<wait><down><down><down><down><wait>e<down><down><down><end> auto=true priority=critical interface=enp0s2 url=http://{{.HTTPIP}}:{{.HTTPPort}}/debian/preseed.cfg<wait><f10><wait>"]
+# boot_command     = ["<wait><down><down><down><down><wait>e<down><down><down><end> auto=true priority=critical interface=enp0s2 url=http://{{.HTTPIP}}:{{.HTTPPort}}/debian/preseed.cfg<wait><f10><wait>"]
+
+# Normal install 
+boot_command     = ["<wait>e<down><down><down><end> auto=true priority=critical interface=enp0s2 url=http://{{.HTTPIP}}:{{.HTTPPort}}/debian/preseed.cfg<wait><f10><wait>"]
 shutdown_command = "echo 'vagrant' | sudo -S /sbin/halt -h -p"
 box_name         = "debian-12"
 
 # working display
 display = "virtio-gpu-pci"
-# Need sound card for speech synthesis
+# Need sound card for speech synthesis install
+# Need serial for normal install (screen ptty device to see boot process)

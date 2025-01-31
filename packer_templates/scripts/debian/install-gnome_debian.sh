@@ -1,16 +1,10 @@
 #!/bin/bash
 
-# Ensure the script is run as root
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root. Use: sudo $0"
-   exit 1
-fi
-
-echo "Updating package list..."
-apt update
-
 echo "Installing minimal GNOME and GDM3..."
 apt install -y --no-install-recommends gnome-core gdm3
+
+echo "Starting gdm..."
+systemctl start gdm
 
 echo "Enabling GDM3 as the default display manager..."
 dpkg-reconfigure gdm3
