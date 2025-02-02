@@ -119,7 +119,7 @@ source "utm-cloud" "vm" {
   // Required to for cloud-init to identify the cd file
   cd_label = "cidata"
   // Required to resize the cloud image
-  resize_cloud_image = true
+  resize_cloud_image = var.resize_cloud_image
 
   ssh_username = var.ssh_username
   ssh_password = var.ssh_password

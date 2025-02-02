@@ -56,7 +56,11 @@ locals {
               "${path.root}/scripts/_common/sshd.sh",
               "${path.root}/scripts/_common/vagrant.sh",
               "${path.root}/scripts/_common/utm.sh",
-            ] : []
+              ] : (
+              var.os_name == "kali" ? [
+                "${path.root}/scripts/_common/sshd.sh",   
+              ]:[]
+            )
           )
         )
       )
@@ -70,7 +74,7 @@ locals {
       ] : (
       var.os_name == "fedora" ? [
         "${path.root}/scripts/${var.os_name}/install-gnome_${var.os_name}.sh",
-      ] : []
+      ] : [ "${path.root}/scripts/_common/dummy.sh" ]
     )
   ) : var.gallery_scripts
 
@@ -163,6 +167,16 @@ build {
       var.os_name == "freebsd" ? "${path.root}/vagrantfile-freebsd.template" : null
     )
     architecture = "${var.os_arch == "x86_64" ? "amd64" : var.os_arch == "aarch64" ? "arm64" : var.os_arch}"
+  }
+
+  post-processor "artifice" {
+    files = ["${path.root}/../builds/${var.os_name}-${var.os_version}-${var.os_arch}.box"]
+  }
+
+  # Create a checksum file for the box file (used for vagrant-registry)
+  post-processor "checksum" {
+    checksum_types = ["sha512"]
+    output = "packer_{{.BuildName}}_{{.ChecksumType}}.checksum"
   }
 
   # To feed artifact to 'vagrant-registry' post-processor

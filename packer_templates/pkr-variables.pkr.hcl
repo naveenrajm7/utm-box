@@ -93,7 +93,7 @@ variable "communicator" {
 
 variable "disk_size" {
   type    = number
-  default = 65536
+  default = null
 }
 
 variable "floppy_files" {
@@ -205,6 +205,12 @@ variable "iso_interface" {
 variable "guest_additions_mode" {
   type    = string
   default = null
+}
+
+# utm-cloud
+variable "resize_cloud_image" {
+  type    = bool
+  default = true
 }
 
 # builder common block
