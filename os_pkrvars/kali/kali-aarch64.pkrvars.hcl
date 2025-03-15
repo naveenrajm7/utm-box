@@ -8,7 +8,7 @@ iso_url      = "/Volumes/MacMiniT7/Developer/UTMvagrant/isofiles/kali-linux-2024
 iso_checksum = "d8be15781c996fcca541c371589f7486cb31f4069b7a2e7d81798e5550b8a1d0"
 
 # Normal install 
-boot_command     = ["<wait>e<down><down><down><end> auto=true priority=critical interface=enp0s2 url=http://{{.HTTPIP}}:{{.HTTPPort}}/kali/preseed.cfg<wait><f10><wait>"]
+boot_command     = ["<wait>e<down><down><down><end> auto=true priority=critical interface=eth1 url=http://{{.HTTPIP}}:{{.HTTPPort}}/kali/preseed.cfg<wait><f10><wait>"]
 shutdown_command = "echo 'vagrant' | sudo -S /sbin/halt -h -p"
 box_name         = "kali"
 
