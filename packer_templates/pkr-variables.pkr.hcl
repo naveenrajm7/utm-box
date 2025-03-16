@@ -71,6 +71,18 @@ variable "default_boot_wait" {
   default = null
 }
 
+variable "use_cd" {
+  type    = bool
+  default = true
+  description = "Use cdrom to pass cloud-init data"
+}
+
+variable "cd_content" {
+  type        = map(string)
+  default     = null
+  description = "Content to be served by the cdrom"
+}
+
 variable "cd_files" {
   type    = list(string)
   default = null
@@ -104,6 +116,12 @@ variable "floppy_files" {
 variable "http_directory" {
   type    = string
   default = null
+}
+
+variable "http_content" {
+  type        = map(string)
+  default     = null
+  description = "Content to be served by the http server"
 }
 
 variable "iso_checksum" {

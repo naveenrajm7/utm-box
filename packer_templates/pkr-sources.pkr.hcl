@@ -101,7 +101,7 @@ source "utm-cloud" "vm" {
   iso_url      = var.iso_url
   iso_checksum = var.iso_checksum
   vm_arch      = "${var.os_arch}"
-  vm_backend   = "qemu"
+  vm_backend   = "qemu"     // cloud build is only supported for qemu backend
   uefi_boot    = local.uefi_boot
   hypervisor   = var.hypervisor
   memory       = var.memory
@@ -110,12 +110,14 @@ source "utm-cloud" "vm" {
 
   // Path to a directory to serve using an HTTP server
   // Required to launch http server
-  http_directory = var.http_directory == null ? "${path.root}/http/${var.os_name}-cloud/" : var.http_directory
+  http_directory = var.http_directory 
+  http_content   = var.http_content
 
   // Required to use CD as a source for cloud-init, default source is http
-  use_cd = true
+  use_cd = var.use_cd
   // Required to pass the cloud-init file as a cd file
   cd_files = local.cd_files
+  cd_content = var.cd_content
   // Required to for cloud-init to identify the cd file
   cd_label = "cidata"
   // Required to resize the cloud image
