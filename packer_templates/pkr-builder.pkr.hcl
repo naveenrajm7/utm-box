@@ -59,7 +59,12 @@ locals {
               ] : (
               var.os_name == "kali" ? [
                 "${path.root}/scripts/_common/sshd.sh",   
-              ]:[]
+                ] : (
+                var.os_name == "amazon" ? [
+                  "${path.root}/scripts/_common/sshd.sh",
+                  "${path.root}/scripts/_common/vagrant.sh",
+                ] : []
+              )
             )
           )
         )
@@ -117,7 +122,7 @@ build {
     )
     expect_disconnect = true
     scripts           = local.gallery_scripts
-    only              = var.for_gallery ? local.source_names : null
+    except              = var.for_gallery ? null : local.source_names
   }
 
   # Windows Updates and scripts
