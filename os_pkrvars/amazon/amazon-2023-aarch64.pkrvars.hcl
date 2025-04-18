@@ -16,8 +16,6 @@ EOF
     "user-data" = <<EOF
 #cloud-config
 password: ec2-user
-chpasswd:
-  expire: False
 users:
   - default
   - name: vagrant
@@ -26,7 +24,7 @@ users:
     shell: /bin/bash
     homedir: /home/vagrant
     lock_passwd: false
-    plain_text_passwd: vagrant
+    passwd: '$6$rounds=4096$5CU3LEj/MQvbkfPb$LmKEF9pCfU8R.dA.GemgE/8GT6r9blge3grJvdsVTMFKyLEQwzEF3SGWqAzjawY/XHRpWj4fOiLBrRyxJhIRJ1'
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1YdxBpNlzxDqfJyw/QKow1F+wvG9hXGoqiysfJOn5Y vagrant insecure public key
 chpasswd:
@@ -39,9 +37,9 @@ network:
   ethernets:
     all:
       match:
-        name: e*
+        name: en*
       dhcp4: true
 EOF
-  }
+}
 
 cd_label = "cidata"
