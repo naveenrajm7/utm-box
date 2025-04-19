@@ -1,7 +1,7 @@
 ---
 name: Box request
 about: Request for New OS Image
-title: ''
+title: '[GALLERY]'
 labels: ''
 assignees: ''
 
