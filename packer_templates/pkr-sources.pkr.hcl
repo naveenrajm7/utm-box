@@ -102,6 +102,7 @@ source "utm-cloud" "vm" {
   iso_checksum = var.iso_checksum
   vm_arch      = "${var.os_arch}"
   vm_backend   = "qemu"     // cloud build is only supported for qemu backend
+  vm_icon      = var.os_icon
   uefi_boot    = local.uefi_boot
   hypervisor   = var.hypervisor
   memory       = var.memory

@@ -18,6 +18,12 @@ variable "os_arch" {
   description = "OS architecture type, x86_64 or aarch64"
 }
 
+variable "os_icon" {
+  type        = string
+  default     = null
+  description = "OS icon name"
+}
+
 variable "keep_registered" {
   type    = bool
   default = true
