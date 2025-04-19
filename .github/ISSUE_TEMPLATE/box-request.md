@@ -21,5 +21,5 @@ assignees: ''
 
 ---
 ## **Important Notes**
-- [] OS supports **unattended installation** methods or provides an official cloud image.
-- [] Provide sufficient documentation or resources to help automate the build process.
+- [ ] OS supports **unattended installation** methods or provides an official cloud image.  
+- [ ] Provide sufficient documentation or resources to help automate the build process.
