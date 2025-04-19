@@ -1,0 +1,41 @@
+#cloud-config
+hostname: alpine
+users:
+  - name: vagrant
+    gecos: Vagrant User
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/ash
+    homedir: /home/vagrant
+    lock_passwd: false
+    passwd: '$6$rounds=4096$5CU3LEj/MQvbkfPb$LmKEF9pCfU8R.dA.GemgE/8GT6r9blge3grJvdsVTMFKyLEQwzEF3SGWqAzjawY/XHRpWj4fOiLBrRyxJhIRJ1'
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1YdxBpNlzxDqfJyw/QKow1F+wvG9hXGoqiysfJOn5Y vagrant insecure public key
+chpasswd:
+  users:
+    - {name: root, password: vagrant}
+  expire: false  
+ssh_pwauth: true
+write_files:
+  - path: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    content: |
+      network: {config: disabled}
+  - path: /etc/network/interfaces
+    content: |
+      auto lo
+      iface lo inet loopback
+
+      auto eth0
+      iface eth0 inet dhcp
+
+      auto eth1
+      iface eth1 inet dhcp
+
+# Use runcmd to explicitly set the root password
+# and bring up the network interfaces using ifup
+runcmd:
+  - echo "root:vagrant" | chpasswd
+  - echo "Bringing up network interfaces"
+  - ifup eth0 || true
+  - ifup eth1 || true
+  - echo "Disabling cloud-init"
+  - touch /etc/cloud/cloud-init.disabled

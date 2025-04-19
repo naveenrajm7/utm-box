@@ -1,0 +1,10 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "alpine"
+  # Default shell in Alpine
+  config.ssh.shell = "ash"
+  # Default privilege escalation method 'doas'
+  config.ssh.sudo_command = "doas -u root %c"
+end

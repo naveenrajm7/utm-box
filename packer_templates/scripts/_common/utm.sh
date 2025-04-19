@@ -16,4 +16,7 @@ elif [ -f "/usr/bin/apt-get" ]; then
     apt-get install -y spice-vdagent qemu-guest-agent spice-webdavd
 elif [ -f "/usr/bin/pacman" ]; then # arch linux
     pacman -S --noconfirm spice-vdagent qemu-guest-agent phodav
+elif [ -f "/sbin/apk" ]; then # alpine linux
+    apk add --no-cache qemu-guest-agent
+    rc-update add qemu-guest-agent default
 fi

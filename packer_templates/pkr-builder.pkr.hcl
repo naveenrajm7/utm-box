@@ -63,7 +63,12 @@ locals {
                 var.os_name == "amazon" ? [
                   "${path.root}/scripts/_common/sshd.sh",
                   "${path.root}/scripts/_common/vagrant.sh",
-                ] : []
+                ] : (
+                var.os_name == "alpine" ? [
+                  "${path.root}/scripts/_common/utm.sh",
+                  "${path.root}/scripts/openbsd/doas_openbsd.sh",
+                  ] :[]
+                )
               )
             )
           )
@@ -99,9 +104,10 @@ build {
     ]
 
     execute_command = (
-      var.os_name == "openbsd" ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" :
+      (var.os_name == "openbsd" || var.os_name == "alpine") ? "echo 'vagrant' | {{.Vars}} su -m root -c 'sh -eux {{.Path}}'" :
       "echo 'vagrant' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
     )
+    
     expect_disconnect = true
     scripts           = local.scripts
     except            = var.is_windows ? local.source_names : null
