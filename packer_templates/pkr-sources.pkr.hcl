@@ -53,6 +53,7 @@ source "utm-iso" "vm" {
   # UTM specific options
   vm_arch              = "${var.os_arch}"
   vm_backend           = "qemu"
+  vm_icon              = var.os_icon
   uefi_boot            = local.uefi_boot
   hypervisor           = var.hypervisor
   hard_drive_interface = var.hard_drive_interface
@@ -64,6 +65,9 @@ source "utm-iso" "vm" {
 
   memory = var.memory
 
+  # display
+  display_hardware_type = var.display_hardware_type
+  
   boot_command = var.boot_command
   boot_wait    = var.boot_wait == null ? local.default_boot_wait : var.boot_wait
 

@@ -114,6 +114,11 @@ variable "disk_size" {
   default = null
 }
 
+variable "display_hardware_type" {
+  type    = string
+  default = null
+}
+
 variable "floppy_files" {
   type    = list(string)
   default = null
